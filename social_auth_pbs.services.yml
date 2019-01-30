@@ -1,0 +1,5 @@
+services:
+  social_auth_pbs.manager:
+    class: Drupal\social_auth_pbs\PbsAuthManager
+    arguments:
+      - '@config.factory'
