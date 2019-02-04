@@ -122,7 +122,7 @@ class PbsAuth extends NetworkBase implements PbsAuthInterface {
   /**
    * Sets the underlying SDK library.
    *
-   * @return \CascadePublicMedia\OAuth2\Client\Provider\Pbs
+   * @return \CascadePublicMedia\OAuth2\Client\Provider\Pbs|bool
    *   The initialized 3rd party library instance.
    *
    * @throws SocialApiException
@@ -142,8 +142,7 @@ class PbsAuth extends NetworkBase implements PbsAuthInterface {
       $league_settings = [
         'clientId' => $settings->getClientId(),
         'clientSecret' => $settings->getClientSecret(),
-        'redirectUri' => $this->requestContext->getCompleteBaseUrl()
-          . '/user/login/pbs/callback',
+        'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/pbs/callback',
       ];
 
       // Proxy configuration data for outward proxy.
