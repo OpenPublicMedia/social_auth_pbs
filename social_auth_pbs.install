@@ -12,7 +12,7 @@ use Drupal\social_auth\Controller\SocialAuthController;
  * Implements hook_requirements().
  *
  * Checks that a compatible version of PHP League OAuth2 PBS library is
- * available. Check installation instructions from the README.txt.
+ * available. Check installation instructions from the README.md.
  */
 function social_auth_pbs_requirements($phase) {
 

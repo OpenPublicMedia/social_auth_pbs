@@ -18,7 +18,7 @@ function social_auth_pbs_help($route_name, RouteMatchInterface $route_match) {
       $output = '<h3>' . t('Configuration instructions') . '</h3>';
       $output .= '<p>';
       $output .= t('Configuration instructions and other useful 
-        documentation can be found in this module\'s README.txt file.');
+        documentation can be found in this module\'s README.md file.');
       $output .= '</p>';
       break;
 

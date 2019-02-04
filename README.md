@@ -21,8 +21,8 @@ REQUIREMENTS
 
 This module requires the following modules:
 
- * Social Auth (https://drupal.org/project/social_auth)
- * Social API (https://drupal.org/project/social_api)
+ * [Social Auth](https://drupal.org/project/social_auth)
+ * [Social API](https://drupal.org/project/social_api)
 
 
 INSTALLATION
@@ -84,8 +84,8 @@ MAINTAINERS
 
 Current maintainers:
 
- * Christopher C. Wells (wells) - https://www.drupal.org/u/wells
+ * [Christopher C. Wells (wells)](https://www.drupal.org/u/wells)
 
 Development is sponsored by:
 
- * Cascade Public Media - https://www.drupal.org/cascade-public-media
+ * [Cascade Public Media](https://www.drupal.org/cascade-public-media)
