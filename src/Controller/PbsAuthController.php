@@ -3,14 +3,15 @@
 namespace Drupal\social_auth_pbs\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\SocialAuthDataHandler;
 use Drupal\social_auth\SocialAuthUserManager;
 use Drupal\social_auth_pbs\PbsAuthManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Returns responses for Simple Auth PBS module routes.
@@ -75,13 +76,16 @@ class PbsAuthController extends ControllerBase {
    *   SocialAuthDataHandler object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Used for logging errors.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Used for settings messages.
    */
   public function __construct(NetworkManager $network_manager,
                               SocialAuthUserManager $user_manager,
                               PbsAuthManager $pbs_auth_manager,
                               RequestStack $request,
                               SocialAuthDataHandler $social_auth_data_handler,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              MessengerInterface $messenger) {
 
     $this->networkManager = $network_manager;
     $this->userManager = $user_manager;
@@ -89,6 +93,7 @@ class PbsAuthController extends ControllerBase {
     $this->request = $request;
     $this->dataHandler = $social_auth_data_handler;
     $this->loggerFactory = $logger_factory;
+    $this->messenger = $messenger;
 
     // Sets the plugin id.
     $this->userManager->setPluginId('social_auth_pbs');
@@ -108,7 +113,8 @@ class PbsAuthController extends ControllerBase {
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
       $container->get('social_auth.data_handler'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('messenger')
     );
   }
 
@@ -150,17 +156,16 @@ class PbsAuthController extends ControllerBase {
     // Checks if user cancel authentication via PBS.
     $error = $this->request->getCurrentRequest()->get('error');
     if ($error == 'access_denied') {
-      drupal_set_message($this->t('You could not be authenticated.'), 'error');
-      return $this->redirect('user.login');
+      $this->messenger->addError($this->t('You could not be authenticated.'));
     }
 
-    /* @var \CascadePublicMedia\OAuth2\Client\Provider\Pbs|false $pbs */
+    /* @var \CascadePublicMedia\OAuth2\Client\Provider\Pbs|bool $pbs */
     $pbs = $this->networkManager->createInstance('social_auth_pbs')->getSdk();
 
     // If PBS client could not be obtained.
     if (!$pbs) {
-      drupal_set_message($this->t('Social Auth PBS not configured properly. 
-        Contact site administrator.'), 'error');
+      $this->messenger->addError($this->t('Social Auth PBS not configured
+        properly. Contact site administrator.'));
       return $this->redirect('user.login');
     }
 
@@ -170,7 +175,8 @@ class PbsAuthController extends ControllerBase {
     $retrievedState = $this->request->getCurrentRequest()->query->get('state');
     if (empty($retrievedState) || ($retrievedState !== $state)) {
       $this->userManager->nullifySessionKeys();
-      drupal_set_message($this->t('PBS login failed. Invalid OAuth2 State.'), 'error');
+      $this->messenger->addError($this->t('PBS login failed. Invalid OAuth2 
+        state.'));
       return $this->redirect('user.login');
     }
 
@@ -182,8 +188,8 @@ class PbsAuthController extends ControllerBase {
     // Gets user's info from PBS API.
     /* @var \CascadePublicMedia\OAuth2\Client\Provider\Pbs $profile */
     if (!$profile = $this->pbsAuthManager->getUserInfo()) {
-      drupal_set_message($this->t('PBS login failed, could not load PBS 
-        profile. Contact site administrator.'), 'error');
+      $this->messenger->addError($this->t('PBS login failed, could not load PBS 
+        profile. Contact site administrator.'));
       return $this->redirect('user.login');
     }
 
