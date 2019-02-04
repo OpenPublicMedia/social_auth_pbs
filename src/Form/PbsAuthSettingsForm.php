@@ -125,6 +125,23 @@ class PbsAuthSettingsForm extends SocialAuthSettingsForm {
         necessary <em>Scopes</em> settings.'),
     ];
 
+    $form['pbs_redirect_url'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Application Callback URL'),
+      '#description' => $this->t('Submit a ticket to PBS Digital Support
+        requesting the following <em>Application Callback URL</em> be added for
+        the provided <em>Client ID</em>.'),
+      '#default_value' => $GLOBALS['base_url'] . '/user/login/pbs/callback',
+    ];
+
+    $form['pbs_redirect_url']['url'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('<strong>Callback URL</strong><br/><code>'
+        . $GLOBALS['base_url'] . '/user/login/pbs/callback' . '</code>'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
