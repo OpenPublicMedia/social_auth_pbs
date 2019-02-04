@@ -122,8 +122,9 @@ class PbsAuthSettingsForm extends SocialAuthSettingsForm {
     $form['pbs_redirect_url']['url'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
-      '#value' => $this->t('<strong>Callback URL</strong><br/><code>'
-        . $GLOBALS['base_url'] . '/user/login/pbs/callback' . '</code>'),
+      '#value' => $this->t('<strong>Callback URL</strong><br/><code>@url</code>', [
+        '@url' => $GLOBALS['base_url'] . '/user/login/pbs/callback',
+      ]),
     ];
 
     return parent::buildForm($form, $form_state);
