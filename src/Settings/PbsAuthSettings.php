@@ -2,7 +2,7 @@
 
 namespace Drupal\social_auth_pbs\Settings;
 
-use Drupal\social_api\Settings\SettingsBase;
+use Drupal\social_auth\Settings\SettingsBase;
 
 /**
  * Defines methods to get Social Auth PBS settings.

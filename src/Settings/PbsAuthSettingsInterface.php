@@ -2,10 +2,12 @@
 
 namespace Drupal\social_auth_pbs\Settings;
 
+use Drupal\social_auth\Settings\SettingsInterface;
+
 /**
  * Defines an interface for Social Auth PBS settings.
  */
-interface PbsAuthSettingsInterface {
+interface PbsAuthSettingsInterface extends SettingsInterface {
 
   /**
    * Gets the client ID.
