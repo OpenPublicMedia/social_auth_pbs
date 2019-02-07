@@ -2,8 +2,10 @@
 
 namespace Drupal\social_auth_pbs;
 
-use Drupal\social_auth\AuthManager\OAuth2Manager;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\social_auth\AuthManager\OAuth2Manager;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 /**
  * Contains all the logic for PBS login integration.
@@ -15,24 +17,41 @@ class PbsAuthManager extends OAuth2Manager {
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Used for accessing configuration object factory.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
    */
-  public function __construct(ConfigFactory $configFactory) {
-    parent::__construct($configFactory->get('social_auth_pbs.settings'));
+  public function __construct(ConfigFactory $configFactory,
+                              LoggerChannelFactoryInterface $logger_factory) {
+    parent::__construct(
+      $configFactory->get('social_auth_pbs.settings'),
+      $logger_factory
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function authenticate() {
-    $this->setAccessToken($this->client->getAccessToken('authorization_code',
-      ['code' => $_GET['code']]));
+    try {
+      $this->setAccessToken($this->client->getAccessToken('authorization_code',
+        ['code' => $_GET['code']]));
+    }
+    catch (IdentityProviderException $e) {
+      $this->loggerFactory->get('social_auth_pbs')
+        ->error('There was an error during authentication. Exception: '
+          . $e->getMessage()
+        );
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function getUserInfo() {
-    $this->user = $this->client->getResourceOwner($this->getAccessToken());
+    if (!$this->user) {
+      $this->user = $this->client->getResourceOwner($this->getAccessToken());
+    }
+
     return $this->user;
   }
 
@@ -51,18 +70,30 @@ class PbsAuthManager extends OAuth2Manager {
   /**
    * {@inheritdoc}
    */
-  public function requestEndPoint($path) {
-    $url = 'https://account.pbs.org' . $path;
+  public function requestEndPoint($method, $path, $domain = NULL, array $options = []) {
+    if (!$domain) {
+      $domain = 'https://account.pbs.org';
+    }
+
+    $url = $domain . $path;
 
     $request = $this->client->getAuthenticatedRequest(
-      'GET',
+      $method,
       $url,
-      $this->getAccessToken()
+      $this->getAccessToken(),
+      $options
     );
 
-    $response = $this->client->getResponse($request);
+    try {
+      return $this->client->getParsedResponse($request);
+    }
+    catch (IdentityProviderException $e) {
+      $this->loggerFactory->get('social_auth_pbs')
+        ->error('There was an error when requesting ' . $url . '. Exception: '
+          . $e->getMessage());
+    }
 
-    return $response->getBody()->getContents();
+    return NULL;
   }
 
   /**
