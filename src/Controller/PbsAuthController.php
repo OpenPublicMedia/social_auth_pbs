@@ -7,8 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\social_api\Plugin\NetworkManager;
-use Drupal\social_auth\SocialAuthDataHandler;
-use Drupal\social_auth\SocialAuthUserManager;
+use Drupal\social_auth\User\UserAuthenticator;
 use Drupal\social_auth_pbs\PbsAuthManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -28,9 +27,9 @@ class PbsAuthController extends ControllerBase {
   /**
    * The user manager.
    *
-   * @var \Drupal\social_auth\SocialAuthUserManager
+   * @var \Drupal\social_auth\User\UserAuthenticator
    */
-  private $userManager;
+  private $userAuthenticator;
 
   /**
    * The PBS authentication manager.
@@ -66,7 +65,7 @@ class PbsAuthController extends ControllerBase {
    *
    * @param \Drupal\social_api\Plugin\NetworkManager $network_manager
    *   Used to get an instance of social_auth_pbs network plugin.
-   * @param \Drupal\social_auth\SocialAuthUserManager $user_manager
+   * @param \Drupal\social_auth\User\UserAuthenticator $user_authenticator
    *   Manages user login/registration.
    * @param \Drupal\social_auth_pbs\PbsAuthManager $pbs_auth_manager
    *   Used to manage authentication methods.
@@ -80,7 +79,7 @@ class PbsAuthController extends ControllerBase {
    *   Used for settings messages.
    */
   public function __construct(NetworkManager $network_manager,
-                              SocialAuthUserManager $user_manager,
+                              UserAuthenticator $user_authenticator,
                               PbsAuthManager $pbs_auth_manager,
                               RequestStack $request,
                               SocialAuthDataHandler $social_auth_data_handler,
@@ -88,7 +87,7 @@ class PbsAuthController extends ControllerBase {
                               MessengerInterface $messenger) {
 
     $this->networkManager = $network_manager;
-    $this->userManager = $user_manager;
+    $this->userAuthenticator = $user_authenticator;
     $this->pbsAuthManager = $pbs_auth_manager;
     $this->request = $request;
     $this->dataHandler = $social_auth_data_handler;
@@ -96,10 +95,10 @@ class PbsAuthController extends ControllerBase {
     $this->messenger = $messenger;
 
     // Sets the plugin id.
-    $this->userManager->setPluginId('social_auth_pbs');
+    $this->userAuthenticator->setPluginId('social_auth_pbs');
 
     // Sets the session keys to nullify if user could not logged in.
-    $this->userManager->setSessionKeysToNullify(['access_token', 'oauth2state']);
+    $this->userAuthenticator->setSessionKeysToNullify(['access_token', 'oauth2state']);
     $this->setting = $this->config('social_auth_pbs.settings');
   }
 
@@ -109,7 +108,7 @@ class PbsAuthController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('plugin.network.manager'),
-      $container->get('social_auth.user_manager'),
+      $container->get('social_auth.user_authenticator'),
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
       $container->get('social_auth.data_handler'),
@@ -174,7 +173,7 @@ class PbsAuthController extends ControllerBase {
     // Retrieves $_GET['state'].
     $retrievedState = $this->request->getCurrentRequest()->query->get('state');
     if (empty($retrievedState) || ($retrievedState !== $state)) {
-      $this->userManager->nullifySessionKeys();
+      $this->userAuthenticator->nullifySessionKeys();
       $this->messenger->addError($this->t('PBS login failed. Invalid OAuth2 
         state.'));
       return $this->redirect('user.login');
@@ -193,17 +192,13 @@ class PbsAuthController extends ControllerBase {
       return $this->redirect('user.login');
     }
 
-    // Gets (or not) extra initial data.
-    $data = $this->userManager->checkIfUserExists($profile->getId()) ? NULL : $this->pbsAuthManager->getExtraDetails();
-
     // If user information could be retrieved.
-    return $this->userManager->authenticateUser(
+    return $this->userAuthenticator->authenticateUser(
       $profile->getName(),
       $profile->getEmail(),
       $profile->getId(),
       $this->pbsAuthManager->getAccessToken(),
-      $profile->getThumbnailUrl(),
-      $data
+      $profile->getThumbnailUrl()
     );
   }
 
