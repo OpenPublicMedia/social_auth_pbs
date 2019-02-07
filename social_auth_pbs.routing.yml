@@ -1,7 +1,7 @@
 social_auth_pbs.redirect_to_pbs:
   path: 'user/login/pbs'
   defaults:
-    _controller: '\Drupal\social_auth_pbs\Controller\PbsAuthController::redirectToPbs'
+    _controller: '\Drupal\social_auth_pbs\Controller\PbsAuthController::redirectToProvider'
   requirements:
     # Anonymous users can log in, but authenticated users can also associate a new provider.
     _access: 'TRUE'
