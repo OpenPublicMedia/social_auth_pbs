@@ -2,6 +2,7 @@
 
 namespace Drupal\social_auth_pbs\Controller;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
@@ -15,6 +16,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Returns responses for Social Auth PBS module routes.
  */
 class PbsAuthController extends OAuth2ControllerBase {
+
+  /**
+   * The JSON Serialize servicer.
+   *
+   * @var \Drupal\Component\Serialization\Json
+   */
+  protected $jsonSerializer;
 
   /**
    * PbsAuthController constructor.
@@ -31,13 +39,16 @@ class PbsAuthController extends OAuth2ControllerBase {
    *   Used to access GET parameters.
    * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
    *   SocialAuthDataHandler object.
+   * @param \Drupal\Component\Serialization\Json $json_serializer
+   *   Used to serialize additional data.
    */
   public function __construct(MessengerInterface $messenger,
                               NetworkManager $network_manager,
                               UserAuthenticator $user_authenticator,
                               PbsAuthManager $pbs_auth_manager,
                               RequestStack $request,
-                              SocialAuthDataHandler $data_handler) {
+                              SocialAuthDataHandler $data_handler,
+                              Json $json_serializer) {
 
     parent::__construct(
       'Social Auth PBS',
@@ -49,6 +60,7 @@ class PbsAuthController extends OAuth2ControllerBase {
       $request,
       $data_handler
     );
+    $this->jsonSerializer = $json_serializer;
   }
 
   /**
@@ -61,7 +73,8 @@ class PbsAuthController extends OAuth2ControllerBase {
       $container->get('social_auth.user_authenticator'),
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
-      $container->get('social_auth.data_handler')
+      $container->get('social_auth.data_handler'),
+      $container->get('serialization.json')
     );
   }
 
@@ -84,7 +97,8 @@ class PbsAuthController extends OAuth2ControllerBase {
         $profile->getEmail(),
         $profile->getId(),
         $this->providerManager->getAccessToken(),
-        $profile->getThumbnailUrl()
+        $profile->getThumbnailUrl(),
+        $this->jsonSerializer->encode($profile->toArray())
       );
     }
 
