@@ -4,6 +4,7 @@ namespace Drupal\social_auth_pbs\Controller;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
 use Drupal\social_auth\SocialAuthDataHandler;
@@ -41,6 +42,8 @@ class PbsAuthController extends OAuth2ControllerBase {
    *   SocialAuthDataHandler object.
    * @param \Drupal\Component\Serialization\Json $json_serializer
    *   Used to serialize additional data.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Used to handle metadata for redirection to authentication URL.
    */
   public function __construct(MessengerInterface $messenger,
                               NetworkManager $network_manager,
@@ -48,7 +51,8 @@ class PbsAuthController extends OAuth2ControllerBase {
                               PbsAuthManager $pbs_auth_manager,
                               RequestStack $request,
                               SocialAuthDataHandler $data_handler,
-                              Json $json_serializer) {
+                              Json $json_serializer,
+                              RendererInterface $renderer) {
 
     parent::__construct(
       'Social Auth PBS',
@@ -58,7 +62,8 @@ class PbsAuthController extends OAuth2ControllerBase {
       $user_authenticator,
       $pbs_auth_manager,
       $request,
-      $data_handler
+      $data_handler,
+      $renderer
     );
     $this->jsonSerializer = $json_serializer;
   }
@@ -74,7 +79,8 @@ class PbsAuthController extends OAuth2ControllerBase {
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
       $container->get('social_auth.data_handler'),
-      $container->get('serialization.json')
+      $container->get('serialization.json'),
+      $container->get('renderer')
     );
   }
 
