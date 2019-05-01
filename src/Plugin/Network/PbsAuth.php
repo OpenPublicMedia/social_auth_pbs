@@ -2,7 +2,7 @@
 
 namespace Drupal\social_auth_pbs\Plugin\Network;
 
-use CascadePublicMedia\OAuth2\Client\Provider\Pbs;
+use OpenPublicMedia\OAuth2\Client\Provider\Pbs;
 use Drupal\Core\Url;
 use Drupal\social_auth\Plugin\Network\NetworkBase;
 use Drupal\social_api\SocialApiException;
@@ -30,7 +30,7 @@ class PbsAuth extends NetworkBase implements PbsAuthInterface {
   /**
    * Sets the underlying SDK library.
    *
-   * @return \CascadePublicMedia\OAuth2\Client\Provider\Pbs|bool
+   * @return \OpenPublicMedia\OAuth2\Client\Provider\Pbs|bool
    *   The initialized 3rd party library instance.
    *
    * @throws SocialApiException
@@ -38,7 +38,7 @@ class PbsAuth extends NetworkBase implements PbsAuthInterface {
    */
   protected function initSdk() {
 
-    $class_name = 'CascadePublicMedia\OAuth2\Client\Provider\Pbs';
+    $class_name = 'OpenPublicMedia\OAuth2\Client\Provider\Pbs';
     if (!class_exists($class_name)) {
       throw new SocialApiException(sprintf('The PBS library for PHP 
         League OAuth2 not found. Class: %s.', $class_name));

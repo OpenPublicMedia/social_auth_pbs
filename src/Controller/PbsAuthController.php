@@ -91,7 +91,7 @@ class PbsAuthController extends OAuth2ControllerBase {
    */
   public function callback() {
 
-    /* @var \CascadePublicMedia\OAuth2\Client\Provider\PbsResourceOwner|null $profile */
+    /* @var \OpenPublicMedia\OAuth2\Client\Provider\PbsResourceOwner|null $profile */
     $profile = $this->processCallback();
 
     // If authentication was successful.

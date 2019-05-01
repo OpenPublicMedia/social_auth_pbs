@@ -25,7 +25,7 @@ function social_auth_pbs_requirements($phase) {
     $requirements = SocialApiImplementerInstaller::checkLibrary(
       'social_auth_pbs',
       'Social Auth PBS',
-      'cascadepublicmedia/oauth2-pbs',
+      'openpublicmedia/oauth2-pbs',
       1.0,
       2.0
     );
