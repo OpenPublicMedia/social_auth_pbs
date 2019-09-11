@@ -2,16 +2,16 @@
 
 namespace Drupal\social_auth_pbs\Plugin\Network;
 
-use OpenPublicMedia\OAuth2\Client\Provider\Pbs;
+use OpenPublicMedia\OAuth2\Client\Provider\Google;
 
 /**
- * Defines a Network Plugin for Social Auth PBS.
+ * Defines a Network Plugin for Social Auth PBS Google variant.
  *
  * @package Drupal\social_auth_pbs\Plugin\Network
  *
  * @Network(
- *   id = "social_auth_pbs",
- *   social_network = "PBS",
+ *   id = "social_auth_pbs_google",
+ *   social_network = "PBS - Google",
  *   type = "social_auth",
  *   handlers = {
  *     "settings": {
@@ -21,13 +21,13 @@ use OpenPublicMedia\OAuth2\Client\Provider\Pbs;
  *   }
  * )
  */
-class PbsAuth extends PbsAuthBase {
+class PbsGoogleAuth extends PbsAuthBase {
 
   /**
    * {@inheritdoc}
    */
   public static function getClassName(): string {
-    return Pbs::class;
+    return Google::class;
   }
 
 }

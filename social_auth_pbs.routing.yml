@@ -8,9 +8,30 @@ social_auth_pbs.redirect_to_pbs:
   options:
     no_cache: TRUE
 
+social_auth_pbs.redirect_to_facebook:
+  path: 'user/login/pbs-facebook'
+  defaults:
+    _controller: '\Drupal\social_auth_pbs\Controller\PbsFacebookAuthController::redirectToProvider'
+  requirements:
+    # Anonymous users can log in, but authenticated users can also associate a new provider.
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE
+
+social_auth_pbs.redirect_to_google:
+  path: 'user/login/pbs-google'
+  defaults:
+    _controller: '\Drupal\social_auth_pbs\Controller\PbsGoogleAuthController::redirectToProvider'
+  requirements:
+    # Anonymous users can log in, but authenticated users can also associate a new provider.
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE
+
 social_auth_pbs.callback:
   path: 'user/login/pbs/callback'
   defaults:
+    # This callback uses the primary PBS controller for _all_ variants.
     _controller: '\Drupal\social_auth_pbs\Controller\PbsAuthController::callback'
   requirements:
     # Anonymous users can log in, but authenticated users can also associate a new provider.
