@@ -61,6 +61,18 @@ PBS for authentication. PBS then returns the user to Drupal site. If there is an
 existing Drupal user with the same email address provided by PBS, that user is
 logged in. Otherwise a new Drupal user is created.
 
+This module also supports login via the PBS provided Facebook and Google OAuth2
+flows. These methods are only supported by URL access (no block buttons are
+provided):
+
+ * **Facebook**: `social_auth_pbs.redirect_to_facebook` (/user/login/pbs-facebook)
+
+ * **Goole**: `social_auth_pbs.redirect_to_google` (/user/login/pbs-google)
+ 
+It is also possible to send users through a PBS Account creation flow by 
+supplying a URL encoded version of the PBS login route to the `next` parameter 
+of PBS's OAuth2 account creation form page. E.g. `https://account.pbs.org/oauth2/register/?next=https%3A%2F%2Fexample.com%2Fuser%2Flogin%2Fpbs`.
+
 
 SUPPORT REQUESTS
 ----------------
