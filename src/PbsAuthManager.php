@@ -64,6 +64,10 @@ class PbsAuthManager extends OAuth2Manager {
     // Returns the URL where user will be redirected.
     return $this->client->getAuthorizationUrl([
       'scope' => $scopes,
+      // The "activation" parameter will force a VPPA check during activation
+      // and present a dialog to the user if necessary. This is required for PBS
+      // Account linked services like Passport video.
+      'activation' => 'true',
     ]);
   }
 
