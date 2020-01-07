@@ -2,7 +2,6 @@
 
 namespace Drupal\social_auth_pbs\Controller;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\social_api\Plugin\NetworkManager;
@@ -19,13 +18,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements PbsAuthControllerInterface {
 
   /**
-   * The JSON Serialize servicer.
-   *
-   * @var \Drupal\Component\Serialization\Json
-   */
-  protected $jsonSerializer;
-
-  /**
    * PbsAuthController constructor.
    *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
@@ -40,8 +32,6 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
    *   Used to access GET parameters.
    * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
    *   SocialAuthDataHandler object.
-   * @param \Drupal\Component\Serialization\Json $json_serializer
-   *   Used to serialize additional data.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Used to handle metadata for redirection to authentication URL.
    */
@@ -52,7 +42,6 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
     PbsAuthManager $pbs_auth_manager,
     RequestStack $request,
     SocialAuthDataHandler $data_handler,
-    Json $json_serializer,
     RendererInterface $renderer
   ) {
 
@@ -67,8 +56,6 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
       $data_handler,
       $renderer
     );
-    $this->jsonSerializer = $json_serializer;
-
     // Sets the session prefix to to the primary controller no matter the
     // variant. The primary controller is used for the all callbacks, so the
     // session prefix must be shared between all variants.
@@ -86,7 +73,6 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
       $container->get('social_auth.data_handler'),
-      $container->get('serialization.json'),
       $container->get('renderer')
     );
   }
@@ -111,7 +97,7 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
         $profile->getId(),
         $this->providerManager->getAccessToken(),
         $profile->getThumbnailUrl(),
-        $this->jsonSerializer->encode($profile->toArray())
+        $profile->toArray()
       );
     }
 
