@@ -4,6 +4,7 @@ services:
     arguments:
       - '@config.factory'
       - '@logger.factory'
+      - '@request_stack'
 
   # Logger.
 
