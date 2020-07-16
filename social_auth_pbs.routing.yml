@@ -8,6 +8,16 @@ social_auth_pbs.redirect_to_pbs:
   options:
     no_cache: TRUE
 
+social_auth_pbs.redirect_to_apple:
+  path: 'user/login/pbs-apple'
+  defaults:
+    _controller: '\Drupal\social_auth_pbs\Controller\PbsAppleAuthController::redirectToProvider'
+  requirements:
+    # Anonymous users can log in, but authenticated users can also associate a new provider.
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE
+
 social_auth_pbs.redirect_to_facebook:
   path: 'user/login/pbs-facebook'
   defaults:
