@@ -14,6 +14,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Returns responses for Social Auth PBS module routes.
+ *
+ * This controller handles callbacks for _all variants_ of the PBS Account OAuth
+ * implementation (Apple, Facebook, Google, etc.). Even though the authorization
+ * process is shared by all variants, it would probably make more sense to break
+ * those variants out in to submodules. The current Social API/Social Auth API
+ * treats the provider ID as the "module" so this module will use a different
+ * string for each variant (e.g. social_auth_pbs, social_auth_pbs_apple, etc.).
+ * This can be confusing e.g. in database logging.
+ *
+ * @see \Drupal\social_auth_pbs\Controller\PbsAppleAuthController
+ * @see \Drupal\social_auth_pbs\Controller\PbsFacebookAuthController
+ * @see \Drupal\social_auth_pbs\Controller\PbsGoogleAuthController
  */
 abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements PbsAuthControllerInterface {
 
@@ -44,10 +56,19 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
     SocialAuthDataHandler $data_handler,
     RendererInterface $renderer
   ) {
+    // Add the provider ID to the session. This is necessary in order to
+    // distinguish between variants (Apple, Facebook, Google, etc.) of the PBS
+    // Account system. All variants are authorized the same way, but it may be
+    // useful to know _which_ variant a particular user is using.
+    $provider_id = $data_handler->get('provider_id');
+    if (empty($provider_id)) {
+      $provider_id = $this->getProviderId();
+      $data_handler->set('provider_id', $provider_id);
+    }
 
     parent::__construct(
       'Social Auth PBS',
-      $this->getProviderId(),
+      $provider_id,
       $messenger,
       $network_manager,
       $user_authenticator,
@@ -56,7 +77,8 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
       $data_handler,
       $renderer
     );
-    // Sets the session prefix to to the primary controller no matter the
+
+    // Set the session prefix to to the primary controller no matter the
     // variant. The primary controller is used for the all callbacks, so the
     // session prefix must be shared between all variants.
     $this->dataHandler->setSessionPrefix(PbsAuthController::getProviderId());
