@@ -106,7 +106,7 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
    */
   public function callback() {
 
-    /* @var \OpenPublicMedia\OAuth2\Client\Provider\PbsResourceOwner|null $profile */
+    /** @var \OpenPublicMedia\OAuth2\Client\Provider\PbsResourceOwner|null $profile */
     $profile = $this->processCallback();
 
     // If authentication was successful.

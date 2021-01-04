@@ -30,7 +30,7 @@ abstract class PbsAuthBase extends NetworkBase implements PbsAuthInterface {
         League OAuth2 not found. Class: %s.', $class_name));
     }
 
-    /* @var \Drupal\social_auth_pbs\Settings\PbsAuthSettings $settings */
+    /** @var \Drupal\social_auth_pbs\Settings\PbsAuthSettings $settings */
     $settings = $this->settings;
     if ($this->validateConfig($settings)) {
       // All these settings are mandatory.

@@ -3,7 +3,7 @@
 namespace Drupal\social_auth_pbs\Controller;
 
 /**
- * Interface PbsAuthControllerInterface.
+ * Interface for the base PBS Social Auth controller.
  *
  * @package Drupal\social_auth_pbs\Controller
  */

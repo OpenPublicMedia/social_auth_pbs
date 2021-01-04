@@ -5,7 +5,7 @@ namespace Drupal\social_auth_pbs\Plugin\Network;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
 
 /**
- * Interface PbsAuthInterface.
+ * Interface for the base PBS Auth network plugin.
  *
  * @package Drupal\social_auth_pbs\Plugin\Network
  */
