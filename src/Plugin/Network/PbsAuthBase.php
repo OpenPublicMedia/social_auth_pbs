@@ -41,9 +41,9 @@ abstract class PbsAuthBase extends NetworkBase implements PbsAuthInterface {
       ];
 
       // Proxy configuration data for outward proxy.
-      $proxyUrl = $this->siteSettings->get('http_client_config')['proxy']['http'];
-      if ($proxyUrl) {
-        $league_settings['proxy'] = $proxyUrl;
+      $config = $this->siteSettings->get('http_client_config');
+      if (!empty($config['proxy']['http'])) {
+        $league_settings['proxy'] = $config['proxy']['http'];
       }
 
       return new $class_name($league_settings);
