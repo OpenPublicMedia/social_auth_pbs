@@ -7,7 +7,7 @@
     "homepage": "https://www.drupal.org/project/social_auth_pbs",
     "support": {
         "issues": "https://www.drupal.org/project/issues/social_auth_pbs",
-        "source": "http://cgit.drupalcode.org/social_auth_pbs"
+        "source": "https://git.drupalcode.org/project/social_auth_pbs"
     },
     "repositories": [
         {
@@ -29,7 +29,12 @@
     "authors": [
         {
             "name": "Christopher C. Wells (wells)",
-            "email": "chris@chrxs.net"
+            "email": "drupal.org@chris-wells.net"
         }
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 }
