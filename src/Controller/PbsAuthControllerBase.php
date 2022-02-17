@@ -4,6 +4,7 @@ namespace Drupal\social_auth_pbs\Controller;
 
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
 use Drupal\social_auth\SocialAuthDataHandler;
@@ -46,6 +47,8 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
    *   SocialAuthDataHandler object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Used to handle metadata for redirection to authentication URL.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
+   *   Current route match.
    */
   public function __construct(
     MessengerInterface $messenger,
@@ -54,14 +57,18 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
     PbsAuthManager $pbs_auth_manager,
     RequestStack $request,
     SocialAuthDataHandler $data_handler,
-    RendererInterface $renderer
+    RendererInterface $renderer,
+    CurrentRouteMatch $current_route_match
   ) {
-    // Add the provider ID to the session. This is necessary in order to
-    // distinguish between variants (Apple, Facebook, Google, etc.) of the PBS
-    // Account system. All variants are authorized the same way, but it may be
-    // useful to know _which_ variant a particular user is using.
-    $provider_id = $data_handler->get('provider_id');
-    if (empty($provider_id)) {
+    // Add the provider ID to the session and use it on callback. This is
+    // necessary in order to distinguish between variants (Apple, Facebook,
+    // Google, etc.) of the PBS Account system. All variants are authorized the
+    // same way, but it may be useful to know _which_ variant a particular user
+    // has used.
+    if ($current_route_match->getRouteName() === 'social_auth_pbs.callback') {
+      $provider_id = $data_handler->get('provider_id') ?? $this->getProviderId();
+    }
+    else {
       $provider_id = $this->getProviderId();
       $data_handler->set('provider_id', $provider_id);
     }
@@ -78,9 +85,9 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
       $renderer
     );
 
-    // Set the session prefix to to the primary controller no matter the
-    // variant. The primary controller is used for the all callbacks, so the
-    // session prefix must be shared between all variants.
+    // Set the session prefix to the primary controller no matter the variant.
+    // The primary controller is used for the all callbacks, so the session
+    // prefix must be shared between all variants.
     $this->dataHandler->setSessionPrefix(PbsAuthController::getProviderId());
   }
 
@@ -95,7 +102,8 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
       $container->get('social_auth_pbs.manager'),
       $container->get('request_stack'),
       $container->get('social_auth.data_handler'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('current_route_match')
     );
   }
 
