@@ -23,7 +23,7 @@ class SocialAuthPbsLoginBlockTest extends SocialAuthTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->module = 'social_auth_pbs';
     $this->provider = 'pbs';
     $this->moduleType = 'social-auth';
