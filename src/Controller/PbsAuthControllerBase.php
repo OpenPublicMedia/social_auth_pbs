@@ -113,6 +113,9 @@ abstract class PbsAuthControllerBase extends OAuth2ControllerBase implements Pbs
    * PBS returns the user here after user has authenticated.
    */
   public function callback() {
+    if ($error_redirect = $this->checkAuthError()) {
+      return $error_redirect;
+    }
 
     /** @var \OpenPublicMedia\OAuth2\Client\Provider\PbsResourceOwner|null $profile */
     $profile = $this->processCallback();
