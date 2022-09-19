@@ -1,7 +1,7 @@
 name: Social Auth PBS
 type: module
 description: 'Social Auth integration for PBS.org.'
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^9 || ^10
 package: Social
 
 configure: social_auth_pbs.settings_form
