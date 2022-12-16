@@ -13,7 +13,21 @@ CONTENTS OF THIS FILE
 INTRODUCTION
 ------------
 
-Social Auth PBS is a PBS authentication integration for Drupal.
+Social Auth PBS is a PBS authentication integration for
+Drupal. It is based on the Social Auth and Social API projects
+
+It adds to the site:
+
+* Multiple new log URLs:
+ * `/user/login/pbs`
+ * `/user/login/pbs-apple`
+ * `/user/login/pbs-facebook`
+ * `/user/login/pbs-google`
+ * `/user/login/pbs-register`
+
+* A settings form at `/admin/config/social-api/social-auth/pbs`.
+
+* A PBS logo in the Social Auth Login block.
 
 
 REQUIREMENTS
@@ -21,21 +35,16 @@ REQUIREMENTS
 
 This module requires the following modules:
 
- * [Social Auth](https://drupal.org/project/social_auth)
- * [Social API](https://drupal.org/project/social_api)
+* [Social Auth](https://drupal.org/project/social_auth)
+* [Social API](https://drupal.org/project/social_api)
 
 
 INSTALLATION
 ------------
 
- * Run composer to install the dependencies:
-   composer require 'drupal/social_auth_pbs'
-
- * Install the dependencies: Social API and Social Auth.
-
- * Install as you would normally install a contributed Drupal module. See:
-   https://drupal.org/documentation/install/modules-themes/modules-8
-   for further information.
+Install as you would normally install a contributed Drupal module. See
+[Installing Modules](https://www.drupal.org/docs/extending-drupal/installing-modules)
+for more details.
 
 
 CONFIGURATION
@@ -65,10 +74,10 @@ This module also supports login via the PBS provided Facebook and Google OAuth2
 flows. These methods are only supported by URL access (no block buttons are
 provided):
 
- * **Facebook**: `social_auth_pbs.redirect_to_facebook`
-   (/user/login/pbs-facebook)
+* **Facebook**: `social_auth_pbs.redirect_to_facebook`
+  (/user/login/pbs-facebook)
 
- * **Google**: `social_auth_pbs.redirect_to_google` (/user/login/pbs-google)
+* **Google**: `social_auth_pbs.redirect_to_google` (/user/login/pbs-google)
  
 It is also possible to send users through a PBS Account creation flow by 
 supplying a URL encoded version of the PBS login route to the `next` parameter 
@@ -79,18 +88,17 @@ of PBS's OAuth2 account creation form page. E.g.
 SUPPORT REQUESTS
 ----------------
 
-Before posting a support request, carefully read the installation
-instructions provided in module documentation page.
+* Before posting a support request, carefully read the installation
+  instructions provided in module documentation page.
 
-Before posting a support request, check Recent log entries at
-admin/reports/dblog.
+* Before posting a support request, check the Recent Log entries at
+  admin/reports/dblog
 
-Once you have done this, you can post a support request at module issue queue:
-https://www.drupal.org/project/issues/social_auth_pbs
+* Once you have done this, you can post a support request at module issue
+  queue: [https://www.drupal.org/project/issues/social_auth_pbs](https://www.drupal.org/project/issues/social_auth_pbs)
 
-When posting a support request, please inform what does the status report say
-at admin/reports/dblog and if you were able to see any errors in
-Recent log entries.
+* When posting a support request, please inform if you were able to see any
+  errors in the Recent Log entries.
 
 
 MAINTAINERS
@@ -98,8 +106,8 @@ MAINTAINERS
 
 Current maintainers:
 
- * [Christopher C. Wells (wells)](https://www.drupal.org/u/wells)
+* [Christopher C. Wells (wells)](https://www.drupal.org/u/wells)
 
 Development sponsored by:
 
- * [Cascade Public Media](https://www.drupal.org/cascade-public-media)
+* [Cascade Public Media](https://www.drupal.org/cascade-public-media)

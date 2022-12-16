@@ -6,14 +6,14 @@ use Drupal\social_auth\Plugin\Network\NetworkBase;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
 
 /**
- * Defines a Network Plugin for Social Auth PBS.
+ * Defines a Network Plugin for Social Auth PBS registration variant.
  *
  * @package Drupal\social_auth_pbs\Plugin\Network
  *
  * @Network(
- *   id = "social_auth_pbs",
- *   short_name = "pbs",
- *   social_network = "PBS",
+ *   id = "social_auth_pbs_register",
+ *   short_name = "pbs_register",
+ *   social_network = "PBS - Register",
  *   img_path = "img/pbs_logo.svg",
  *   type = "social_auth",
  *   class_name = "\OpenPublicMedia\OAuth2\Client\Provider\Pbs",
@@ -31,4 +31,4 @@ use Drupal\social_auth\Plugin\Network\NetworkInterface;
  *   }
  * )
  */
-class PbsAuth extends NetworkBase implements NetworkInterface {}
+class PbsRegisterAuth extends NetworkBase implements NetworkInterface {}

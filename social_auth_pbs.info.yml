@@ -7,4 +7,4 @@ package: Social
 configure: social_auth_pbs.settings_form
 
 dependencies:
-  - social_auth:social_auth (>= 3.0)
+  - social_auth:social_auth

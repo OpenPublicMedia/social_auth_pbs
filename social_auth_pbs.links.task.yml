@@ -1,4 +1,6 @@
 social_auth_pbs.settings.tab:
   title: 'PBS'
-  route_name: social_auth_pbs.settings_form
+  route_name: social_auth.network.settings_form
+  route_parameters:
+    network: 'pbs'
   base_route: social_auth.integrations

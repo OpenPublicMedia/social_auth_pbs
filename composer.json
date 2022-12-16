@@ -9,16 +9,21 @@
         "issues": "https://www.drupal.org/project/issues/social_auth_pbs",
         "source": "https://git.drupalcode.org/project/social_auth_pbs"
     },
+    "authors": [
+        {
+            "name": "Christopher C. Wells (wells)",
+            "email": "drupal.org@chris-wells.net"
+        }
+    ],
     "repositories": [
         {
             "type": "composer",
             "url":  "https://packages.drupal.org/8"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
-        "drupal/social_auth": "^3.0",
+        "php": "^8",
+        "drupal/social_auth": "^4.0",
         "openpublicmedia/oauth2-pbs": "^1.0",
         "drupal/core": "^9 || ^10"
     },
@@ -26,12 +31,8 @@
         "drupal/coder": "^8.3",
         "phpcompatibility/php-compatibility": "^9.3"
     },
-    "authors": [
-        {
-            "name": "Christopher C. Wells (wells)",
-            "email": "drupal.org@chris-wells.net"
-        }
-    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
