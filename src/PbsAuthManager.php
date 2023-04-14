@@ -56,6 +56,8 @@ class PbsAuthManager extends OAuth2Manager {
         $owner->getEmail(),
         additional_data: $this->getExtraDetails()
       );
+      $this->user->setFirstName($owner->getFirstName());
+      $this->user->setLastName($owner->getLastName());
     }
     return $this->user;
   }
