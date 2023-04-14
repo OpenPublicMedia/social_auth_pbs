@@ -18,14 +18,9 @@ Drupal. It is based on the Social Auth and Social API projects
 
 It adds to the site:
 
-* Multiple new log URLs:
- * `/user/login/pbs`
- * `/user/login/pbs-apple`
- * `/user/login/pbs-facebook`
- * `/user/login/pbs-google`
- * `/user/login/pbs-register`
+* A login URL: `/user/login/pbs`
 
-* A settings form at `/admin/config/social-api/social-auth/pbs`.
+* A settings form: `/admin/config/social-api/social-auth/pbs`.
 
 * A PBS logo in the Social Auth Login block.
 
@@ -65,24 +60,12 @@ User can click on the PBS logo in the Social Auth Login block. You can also add
 a button or link anywhere on the site that points to /user/login/pbs, so
 theming and customizing the button or link is very flexible.
 
-When the user opens the /user/login/pbs link, it automatically takes user to
+When the user opens the /user/login/pbs link, it automatically takes the user to
 PBS for authentication. PBS then returns the user to Drupal site. If there is an
 existing Drupal user with the same email address provided by PBS, that user is
 logged in. Otherwise, a new Drupal user is created.
 
-This module also supports login via the PBS provided Facebook and Google OAuth2
-flows. These methods are only supported by URL access (no block buttons are
-provided):
-
-* **Facebook**: `social_auth_pbs.redirect_to_facebook`
-  (/user/login/pbs-facebook)
-
-* **Google**: `social_auth_pbs.redirect_to_google` (/user/login/pbs-google)
- 
-It is also possible to send users through a PBS Account creation flow by 
-supplying a URL encoded version of the PBS login route to the `next` parameter 
-of PBS's OAuth2 account creation form page. E.g.
-`[url]?next=https%3A%2F%2Fexample.com%2Fuser%2Flogin%2Fpbs`.
+This module also supports login via the PBS provided third-party OAuth2 flows.
 
 
 SUPPORT REQUESTS
