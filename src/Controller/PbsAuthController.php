@@ -2,8 +2,10 @@
 
 namespace Drupal\social_auth_pbs\Controller;
 
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
 use Drupal\social_auth\Plugin\Network\NetworkInterface;
+use Drupal\social_auth_pbs\Plugin\Network\PbsRegisterAuth;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,7 +45,22 @@ class PbsAuthController extends OAuth2ControllerBase {
     $network = $this->networkManager->createInstance("social_auth_$network_short_name");
     $this->setSessionPrefix();
     $this->dataHandler->set('plugin_id', $network->getId());
-    return parent::redirectToProvider($network);
+
+    if ($network instanceof PbsRegisterAuth) {
+      $response = parent::redirectToProvider($network);
+      // The PBS register response sends the user first through an account
+      // creation flow then through the regular OAuth2 authorization flow.
+      if ($response instanceof TrustedRedirectResponse) {
+        $url_parts = parse_url($response->getTargetUrl());
+        $next = urlencode("{$url_parts['path']}?{$url_parts['query']}");
+        $register_url = "{$url_parts['scheme']}://{$url_parts['host']}/oauth2/register/?next=$next";
+        $response->setTrustedTargetUrl($register_url);
+      }
+      return $response;
+    }
+    else {
+      return parent::redirectToProvider($network);
+    }
   }
 
   /**
