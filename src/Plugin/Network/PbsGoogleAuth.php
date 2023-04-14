@@ -19,8 +19,8 @@ use Drupal\social_auth\Plugin\Network\NetworkInterface;
  *   class_name = "\OpenPublicMedia\OAuth2\Client\Provider\Google",
  *   auth_manager = "\Drupal\social_auth_pbs\PbsAuthManager",
  *   routes = {
- *     "redirect": "social_auth.network.redirect",
- *     "callback": "social_auth.network.callback",
+ *     "redirect": "social_auth_pbs.network.pbs_google.redirect",
+ *     "callback": "social_auth_pbs.network.callback",
  *     "settings_form": "social_auth.network.settings_form",
  *   },
  *   handlers = {
