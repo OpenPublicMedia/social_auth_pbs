@@ -19,7 +19,7 @@ use Drupal\social_auth\Plugin\Network\NetworkInterface;
  *   class_name = "\OpenPublicMedia\OAuth2\Client\Provider\Apple",
  *   auth_manager = "\Drupal\social_auth_pbs\PbsAuthManager",
  *   routes = {
- *     "redirect": "social_auth_pbs.network.pbs.redirect",
+ *     "redirect": "social_auth_pbs.network.pbs_apple.redirect",
  *     "callback": "social_auth_pbs.network.callback",
  *     "settings_form": "social_auth.network.settings_form",
  *   },
