@@ -1,51 +1,4 @@
-# Use redirect methods from specific controllers so the specific service
-# controller in use can be identified and used to set the correct provider
-# during callback.
-#
-
-social_auth_pbs.network.pbs_apple.redirect:
-  path: 'user/login/pbs-apple'
-  defaults:
-    _controller: '\Drupal\social_auth_pbs\Controller\PbsAppleAuthController::redirectToProvider'
-    network: pbs_apple
-  requirements:
-    # Anonymous users can log in, but authenticated users can also associate a new provider.
-    _access: 'TRUE'
-  options:
-    no_cache: TRUE
-    parameters:
-      network:
-        type: network
-
-social_auth_pbs.network.pbs_facebook.redirect:
-  path: 'user/login/pbs-facebook'
-  defaults:
-    _controller: '\Drupal\social_auth_pbs\Controller\PbsFacebookAuthController::redirectToProvider'
-    network: pbs_facebook
-  requirements:
-    # Anonymous users can log in, but authenticated users can also associate a new provider.
-    _access: 'TRUE'
-  options:
-    no_cache: TRUE
-    parameters:
-      network:
-        type: network
-
-social_auth_pbs.network.pbs_google.redirect:
-  path: 'user/login/pbs-google'
-  defaults:
-    _controller: '\Drupal\social_auth_pbs\Controller\PbsGoogleAuthController::redirectToProvider'
-    network: pbs_google
-  requirements:
-    # Anonymous users can log in, but authenticated users can also associate a new provider.
-    _access: 'TRUE'
-  options:
-    no_cache: TRUE
-    parameters:
-      network:
-        type: network
-
-social_auth_pbs.network.pbs.redirect:
+social_auth_pbs.redirect:
   path: 'user/login/pbs'
   defaults:
     _controller: '\Drupal\social_auth_pbs\Controller\PbsAuthController::redirectToProvider'
@@ -59,21 +12,7 @@ social_auth_pbs.network.pbs.redirect:
       network:
         type: network
 
-social_auth_pbs.network.pbs_register.redirect:
-  path: 'user/login/pbs-register'
-  defaults:
-    _controller: '\Drupal\social_auth_pbs\Controller\PbsRegisterController::redirectToProvider'
-    network: pbs_register
-  requirements:
-    # Anonymous users can log in, but authenticated users can also associate a new provider.
-    _access: 'TRUE'
-  options:
-    no_cache: TRUE
-    parameters:
-      network:
-        type: network
-
-social_auth_pbs.network.callback:
+social_auth_pbs.callback:
   path: 'user/login/pbs/callback'
   defaults:
     # This callback uses the primary PBS controller for _all_ variants.
