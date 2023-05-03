@@ -37,10 +37,7 @@ class PbsAuthController extends OAuth2ControllerBase {
    */
   public function redirectToProvider(NetworkInterface $network): Response {
     $request = $this->request->getCurrentRequest();
-    if (!$request->query->has('network')) {
-      throw new \RuntimeException("Network ID missing.");
-    }
-    $network_short_name = $request->query->get('network');
+    $network_short_name = $request->query->get('network') ?? 'pbs';
     /** @var \Drupal\social_auth\Plugin\Network\NetworkInterface $network */
     $network = $this->networkManager->createInstance("social_auth_$network_short_name");
     $this->setSessionPrefix();
